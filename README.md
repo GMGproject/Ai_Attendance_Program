@@ -29,3 +29,7 @@ pip install requirements.txt
 ```
 python main.py
 ```
+
+
+### 참고 논문
+[논문1](https://www.naver.com)
