@@ -15,14 +15,29 @@ def detectMTCNN(frame):
     '''
 
     detector = MTCNN()
-    detect = detector.detect_faces(frame)
+    faces = detector.detect_faces(frame)
+    _faces = [] # list for return faces position
 
-    if len(detect) > 0: 
-        print(detect[0]['box'])
-        print(detect[0]['confidence'])
-        print(detect[0]['keypoints'])
+    '''
+    detect_faces value : box -> array | confidence -> float | keypoints -> dictionary
+    box : box positions (start x, start y, end x, end y)
+    confidence : predict confidence
+    keypoints : facial keypoints (5 points [left eye, right eye, nose, left mouth, right mouth])
 
-    cv2.imshow('gg', frame)
+    detect[faces]{'box' : [startX, startY, endX, endY], 
+                  'confidnece' : confidence, 
+                  'keypoints' : {'left eye'    : (x, y)
+                                 'right eye'   : (x, y)
+                                 'nose'        : (x, y)
+                                 'left mouth'  : (x, y)
+                                 'right mouth' : (x, y)}}
+    '''
+
+    for face in faces:
+        _faces.append(face['box'])
+
+    print(_faces)
+    cv2.imshow('frame', frame)
 
 def detectSSD(frame):
     '''
@@ -52,12 +67,12 @@ def detectSSD(frame):
                     if startX < 0:
                         startX = 0
                     elif endX > width:
-                        endX = width
+                        endX = int(width)
 
                     if startY < 0:
                         startY = 0
                     elif endY > height:
-                        endY = height
+                        endY = int(height)
                     
 
                     faces.append((startX, startY, endX, endY))
@@ -67,11 +82,13 @@ def detectSSD(frame):
 
                     text = "{:.2f}%".format(confidence * 100)
 
-                    y = startY - 10 if startY - 10 > 10 else startY + 10
+                    y = startY - 10 if startY - 10 > 10 else startY + 10 # set y position to write percentage of confidence value on left top of boxes
 
                     cv2.rectangle(frame, (startX, startY), (endX, endY), (0, 255, 0), 2)
                     cv2.putText(frame, text, (startX, y), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1)
                     #======================================================================================
+
+    cv2.imshow('frame', frame)
 
 
 cap = cv2.VideoCapture(0)
@@ -92,6 +109,3 @@ while True:
         
 cap.release()
 cv2.destroyAllWindows()
-
-
-
