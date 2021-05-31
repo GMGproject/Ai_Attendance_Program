@@ -1,5 +1,11 @@
 import socket
 
+def returnInternalHost():
+    '''
+    return : return my computer's internal host
+    '''
+    return socket.gethostbyname(socket.gethostname())
+
 def createServerSocket(host, port):
     '''
     args discription

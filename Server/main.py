@@ -1,5 +1,6 @@
 import argparse
-from server import createServerSocket
+
+from server import createServerSocket, returnInternalHost
 
 def main(args):
     host = args.host
@@ -21,11 +22,14 @@ def main(args):
         
     
 if __name__ == "__main__":
+    # get internal host
+    internalHost = returnInternalHost()
+
     # create parser instance
     parser = argparse.ArgumentParser(description='Server Args ip, port')
 
     # Setup input values
-    parser.add_argument('--host', type=str, default="localhost")
+    parser.add_argument('--host', type=str, default=internalHost)
     parser.add_argument('--port', type=int, default=9999)
 
     args = parser.parse_args()
