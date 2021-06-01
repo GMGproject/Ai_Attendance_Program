@@ -1,3 +1,9 @@
 opencv-python
-tensorflow >= 2.2.0
-MTCNN
+cmake
+dlib
+tensorflow>=2.2.0
+mtcnn
+face-recognition
+
+#DB=========
+pymysql
