@@ -1,5 +1,4 @@
 # Face Detection
-
 from mtcnn import MTCNN
 import cv2
 import numpy as np
@@ -39,15 +38,21 @@ def detectMTCNN(frame):
     print(_faces)
     cv2.imshow('frame', frame)
 
-def detectSSD(frame):
+def detectSSD(width, height, frame):
     '''
     args discription
     frame : frame to detect faces
+
+    return
+    faces : detected faces list from frame 
     '''
-    model=cv2.dnn.readNetFromCaffe(prototxt_name,model_name) # read face detection model made by caffe
-    blob=cv2.dnn.blobFromImage(cv2.resize(frame,(300,300)),1.0, (300,300),(104.0,177.0,123.0)) # Convert Frame data to Blob data 
-    model.setInput(blob) # model setting
-    detections=model.forward() #predict 200 boxes for one frame
+    try:
+        model=cv2.dnn.readNetFromCaffe(prototxt_name,model_name) # read face detection model made by caffe
+        blob=cv2.dnn.blobFromImage(cv2.resize(frame,(300,300)),1.0, (300,300),(104.0,177.0,123.0)) # Convert Frame data to Blob data 
+        model.setInput(blob) # model setting
+        detections=model.forward() #predict 200 boxes for one frame
+    except Exception as e:
+        print(e)
 
     faces = [] # faces box to send on face recognition model
 
@@ -74,38 +79,10 @@ def detectSSD(frame):
                     elif endY > height:
                         endY = int(height)
                     
-
                     faces.append((startX, startY, endX, endY))
 
                     # Draw infos in Frame==================================================================    
                     print("{:.2f}%".format(confidence * 100), startX, startY, endX, endY)
-
-                    text = "{:.2f}%".format(confidence * 100)
-
-                    y = startY - 10 if startY - 10 > 10 else startY + 10 # set y position to write percentage of confidence value on left top of boxes
-
-                    cv2.rectangle(frame, (startX, startY), (endX, endY), (0, 255, 0), 2)
-                    cv2.putText(frame, text, (startX, y), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1)
                     #======================================================================================
 
-    cv2.imshow('frame', frame)
-
-
-cap = cv2.VideoCapture(0)
-width = cap.get(cv2.CAP_PROP_FRAME_WIDTH)
-height = cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
-
-while True:
-    retval, frame = cap.read()
-    if not retval:
-        break   
-    frame = cv2.flip(frame, 1)   
-    #detectSSD(frame)
-    detectMTCNN(frame)
-
-    key = cv2.waitKey(1)
-    if key == 27:
-        break
-        
-cap.release()
-cv2.destroyAllWindows()
+    return faces
