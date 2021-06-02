@@ -1,5 +1,5 @@
 # Face Detection
-from mtcnn import MTCNN
+#from mtcnn import MTCNN
 import cv2
 import numpy as np
 
@@ -7,7 +7,10 @@ import numpy as np
 model_name='./Model/weights/res10_300x300_ssd_iter_140000.caffemodel'
 prototxt_name='./Model/weights/deploy.prototxt.txt'
 
+
 def detectMTCNN(frame):
+    pass
+"""
     '''
     args discription
     frame : frame to detect faces
@@ -37,6 +40,8 @@ def detectMTCNN(frame):
 
     print(_faces)
     cv2.imshow('frame', frame)
+"""
+
 
 def detectSSD(width, height, frame):
     '''
