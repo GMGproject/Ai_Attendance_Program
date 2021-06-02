@@ -41,7 +41,7 @@ python ./Model/test.py
 
 
 ### 참고 논문
-[논문1](https://www.naver.com)
+ - [논문1](https://www.naver.com)
 
 ### 참고 Github
  - [face_recognition](https://github.com/ageitgey/face_recognition)
