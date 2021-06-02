@@ -22,6 +22,7 @@ Lang : Pyhton 3.8
 
 ### 패키지 설치
 ```
+conda install -c conda-forge dlib
 pip install requirements.txt
 ```
 
