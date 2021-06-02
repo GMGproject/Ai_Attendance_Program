@@ -38,4 +38,7 @@ def chanegeAttendance(resultList):
     '''
     resultName = max(resultList, key=resultList.count)
     
-    print("{}님 출석입니다.".format(resultName))
+    if resultName == "Unknown":
+        print("처음뵙는분이군요 반갑습니다.")
+    else:        
+        print("{}님 출석입니다.".format(resultName))

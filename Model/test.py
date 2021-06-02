@@ -29,7 +29,7 @@ while True:
 
     if passCheck:
         predictions = predict(frame, passFaces, model_path="./Model/weights/trained_knn_model.clf")
-        for name, (left, top, right, bottom) in predictions:
+        for name, (top, right, bottom, left) in predictions:
             resultList.append(name)
             print("- Found {} at ({}, {})".format(name, left, top))
             frame = cv2.rectangle(frame, (left, top), (right, bottom), (0,0,255), 2)

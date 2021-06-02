@@ -84,7 +84,7 @@ def detectSSD(width, height, frame):
                     elif endY > height:
                         endY = int(height)
                     
-                    faces.append((startX, startY, endX, endY))
+                    faces.append((startY, endX, endY, startX)) # top, right, bottom left
 
                     # Draw infos in Frame==================================================================    
                     print("{:.2f}%".format(confidence * 100), startX, startY, endX, endY)
