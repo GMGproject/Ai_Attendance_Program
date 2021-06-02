@@ -22,6 +22,7 @@ Lang : Pyhton 3.8
 
 ### 패키지 설치
 ```
+# 먼저 dlib을 설치해야 requirements 설치시 패키지 충돌 오류가 없습니다.
 conda install -c conda-forge dlib
 pip install requirements.txt
 ```
