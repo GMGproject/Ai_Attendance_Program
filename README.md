@@ -44,5 +44,5 @@ python ./Model/test.py
 [논문1](https://www.naver.com)
 
 ### 참고 Github
-[face_recognition](https://github.com/ageitgey/face_recognition)
+ - [face_recognition](https://github.com/ageitgey/face_recognition)
 
