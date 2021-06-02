@@ -20,5 +20,3 @@ def getFaceEncoding(faceDir, name):
 
     return faceDictData
 
-def recogKNN(passedFaces):
-    pass

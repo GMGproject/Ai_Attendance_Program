@@ -30,3 +30,12 @@ def checkFaceSize(faces, size=100):
                 passCheck = True
 
     return passCheck, passedFaces
+
+def chanegeAttendance(resultList):
+    '''
+    args discription
+    resultList : List of recognized names
+    '''
+    resultName = max(resultList, key=resultList.count)
+    
+    print("{}님 출석입니다.".format(resultName))
