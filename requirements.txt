@@ -1,9 +1,10 @@
 opencv-python
-cmake
-dlib
+#cmake
+#dlib
 tensorflow>=2.2.0
 mtcnn
 face-recognition
+sklearn
 
 #DB=========
 pymysql
