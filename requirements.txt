@@ -7,4 +7,4 @@ face-recognition
 sklearn
 pyqt5
 #DB=========
-pymysql
+mysql-connector-python
