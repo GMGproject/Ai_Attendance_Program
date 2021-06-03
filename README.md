@@ -18,7 +18,7 @@
 OS   : Windows 10
 Tool : Visual Code
 Lang : Pyhton 3.8
-DB   : MySQL
+DB   : MySQL 8.0.23
 ```
 
 ### 패키지 설치
