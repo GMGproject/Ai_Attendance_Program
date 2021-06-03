@@ -1,6 +1,8 @@
 import argparse
+import threading
 
 from server import createServerSocket, returnInternalHost
+from server import packData, sendData, recvData
 
 def main(args):
     host = args.host
@@ -17,8 +19,9 @@ def main(args):
             print("Connect with {0}:{1}".format(client_socket, addr))
 
         while client_socket:
-            print("Hello World")
-            #break
+            thread_stratServer = threading.Thread(target=recvData(client_socket))
+            thread_stratServer.start()
+
         
     
 if __name__ == "__main__":

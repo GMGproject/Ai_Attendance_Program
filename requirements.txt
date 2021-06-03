@@ -5,6 +5,7 @@ tensorflow>=2.2.0
 mtcnn
 face-recognition
 sklearn
+pyqt5
 
 #DB=========
 pymysql
