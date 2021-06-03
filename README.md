@@ -31,13 +31,10 @@ pip install requirements.txt
 ### 사용 방법
 ```
 #Client 실행 방법
-python ./Client/main.py --host "host" --port port --cam camnumber
+python c_main.py --host "host" --port port --cam camnumber
 
 #Server 실행 방법
-python ./Server/main.py --host "host" --port
-
-#Test 실행 방법
-python ./Model/test.py
+python s_main.py --host "host" --port
 ```
 
 
