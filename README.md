@@ -43,6 +43,7 @@ python ./Model/test.py
 
 ### 참고 논문
  - [이순기. "안면인식 기술을 이용한 출입통제 단말 장치 개발." 국내석사학위논문 경일대학교 대학원, 2013. 경상북도](http://kiu.dcollection.net/public_resource/pdf/000001624617_20210603222714.pdf)
+ - [W. Liu, et al, SSD: Single Shot Multibox Detector, 2016, ECCV](https://arxiv.org/pdf/1512.02325.pdf)
 
 ### 참고 Github
  - KNN알고리즘 참고 : [ageitgey/face_recognition](https://github.com/ageitgey/face_recognition)
