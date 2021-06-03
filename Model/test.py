@@ -23,7 +23,6 @@ while True:
     frame = cv2.flip(frame, 1)   
     
     faces = detectSSD(width, height, frame)
-    #faces = detectMTCNN(frame)
 
     passCheck, passFaces = checkFaceSize(faces, size=faceSize)
 
