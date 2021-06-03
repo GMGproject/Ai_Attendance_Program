@@ -1,0 +1,15 @@
+CREATE TABLE attend_Info (
+  studentID INTEGER UNSIGNED NOT NULL,
+  Date DATE NOT NULL AUTO_INCREMENT,
+  Time TIME NULL,
+  lectureID INTEGER UNSIGNED NULL,
+  PRIMARY KEY(studentID)
+);
+
+CREATE TABLE stu_info (
+  studentID INTEGER UNSIGNED NOT NULL,
+  studentName VARCHAR(45) NULL,
+  PRIMARY KEY(studentID)
+);
+
+
