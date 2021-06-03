@@ -45,5 +45,5 @@ python ./Model/test.py
  - [논문1](https://www.naver.com)
 
 ### 참고 Github
- - [ageitgey/face_recognition](https://github.com/ageitgey/face_recognition)
+ - KNN알고리즘 참고 : [ageitgey/face_recognition](https://github.com/ageitgey/face_recognition)
 
