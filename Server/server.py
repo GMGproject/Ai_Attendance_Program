@@ -4,6 +4,10 @@ import pickle
 import numpy as np
 import cv2
 
+from Server.Model.detection import detectSSD, detectMTCNN
+from Server.Model.model import predict
+from Server.Model.utils import checkFaceSize, chanegeAttendance
+
 def returnInternalHost():
     '''
     return : return my computer's internal host
@@ -29,9 +33,10 @@ def createServerSocket(host, port):
     return server_socket
 
 def recvData(client_socket):
-        data = b""
-        payload_size = struct.calcsize("Q")
+    data=b""
+    payload_size=struct.calcsize("Q")
 
+    while True:
         try:
             while len(data) < payload_size:
                 packet = client_socket.recv(4 * 1024)  # 4K
@@ -42,15 +47,42 @@ def recvData(client_socket):
             msg_size = struct.unpack("Q", packed_msg_size)[0]
             while len(data) < msg_size:
                 data += client_socket.recv(4 * 1024)
-        except struct.error as se:
-                print(se)
-                print("server Disconnected")
-                
-        frame_data = data[:msg_size]
-        data = data[msg_size:]
-        frame = pickle.loads(frame_data)
 
-        return frame
-        #frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            frame_data = data[:msg_size]
+            data = data[msg_size:]
+            frame = pickle.loads(frame_data)
+
+            frame = faceRecognition(frame)
+
+            cv2.imshow('server VIDEO', frame)
+            key = cv2.waitKey(1) & 0xFF
+            if key == 27:
+                break
+
+        except struct.error as se:
+            print(se)
+            print("server Disconnected")
+
+def faceRecognition(frame, faceSize=200, resultCheckSize=10):
+    resultList = []
+
+    faces = detectSSD(frame)
+    passCheck, passFaces = checkFaceSize(faces, size=faceSize)
+
+    if passCheck:
+        predictions = predict(frame, passFaces, model_path="./Server/Model/weights/trained_knn_model.clf")
+        for name, (top, right, bottom, left) in predictions:
+            resultList.append(name)
+            print("- Found {} at ({}, {})".format(name, left, top))
+            frame = cv2.rectangle(frame, (left, top), (right, bottom), (0,0,255), 2)
+            cv2.putText(frame, name, (left, top - 5), cv2.FONT_HERSHEY_DUPLEX, 2,(0,0,255), 2, cv2.LINE_AA)
+
+        if len(resultList) == resultCheckSize:
+            chanegeAttendance(resultList)
+            resultList.clear()
+
+    return frame
+
+    
 
         
