@@ -18,6 +18,7 @@
 OS   : Windows 10
 Tool : Visual Code
 Lang : Pyhton 3.8
+DB   : MySQL
 ```
 
 ### 패키지 설치
@@ -44,5 +45,5 @@ python ./Model/test.py
  - [논문1](https://www.naver.com)
 
 ### 참고 Github
- - [face_recognition](https://github.com/ageitgey/face_recognition)
+ - [ageitgey/face_recognition](https://github.com/ageitgey/face_recognition)
 
