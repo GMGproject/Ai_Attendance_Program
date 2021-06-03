@@ -6,6 +6,5 @@ mtcnn
 face-recognition
 sklearn
 pyqt5
-
 #DB=========
 pymysql
