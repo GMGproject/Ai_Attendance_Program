@@ -6,7 +6,13 @@ import cv2
 
 from Server.Model.detection import detectSSD, detectMTCNN
 from Server.Model.model import predict
-from Server.Model.utils import checkFaceSize, chanegeAttendance
+from Server.Model.utils import checkFaceSize
+
+from Server.utils import chanegeAttendance, getNowTime
+from Server.db import queryExecutor
+
+global resultList
+resultList = []
 
 def returnInternalHost():
     '''
@@ -33,6 +39,10 @@ def createServerSocket(host, port):
     return server_socket
 
 def recvData(client_socket):
+    '''
+    args discription
+    client_socket : client connected socket
+    '''
     data=b""
     payload_size=struct.calcsize("Q")
 
@@ -64,25 +74,62 @@ def recvData(client_socket):
             print("server Disconnected")
 
 def faceRecognition(frame, faceSize=200, resultCheckSize=10):
-    resultList = []
+    '''
+    args discription
+    frame : frame from client
+    faceSize : Set faceSize to recognize face
+     - default = 200
+    resultCheckSize : Set how many frames to check result
+     - default = 10
 
+    return
+    frame : Drawn frame
+    '''
+    global resultList
+
+    # Face Detection
     faces = detectSSD(frame)
-    passCheck, passFaces = checkFaceSize(faces, size=faceSize)
+    if len(faces) != 0:
+        # Check Face Size to judge face Recognition
+        passCheck, passFaces = checkFaceSize(faces, size=faceSize)
 
-    if passCheck:
-        predictions = predict(frame, passFaces, model_path="./Server/Model/weights/trained_knn_model.clf")
-        for name, (top, right, bottom, left) in predictions:
-            resultList.append(name)
-            print("- Found {} at ({}, {})".format(name, left, top))
-            frame = cv2.rectangle(frame, (left, top), (right, bottom), (0,0,255), 2)
-            cv2.putText(frame, name, (left, top - 5), cv2.FONT_HERSHEY_DUPLEX, 2,(0,0,255), 2, cv2.LINE_AA)
+        if passCheck:
+            # Face Recognition
+            predictions = predict(frame, passFaces, model_path="./Server/Model/weights/trained_knn_model.clf")
+            for name, (top, right, bottom, left) in predictions:
+                resultList.append(name)
+                print("- Found {} at ({}, {})".format(name, left, top))
 
-        if len(resultList) == resultCheckSize:
-            chanegeAttendance(resultList)
-            resultList.clear()
+                # Draw information on frame
+                frame = cv2.rectangle(frame, (left, top), (right, bottom), (0,0,255), 2)
+                cv2.putText(frame, name, (left, top - 5), cv2.FONT_HERSHEY_DUPLEX, 2,(0,0,255), 2, cv2.LINE_AA)
+
+            print(len(resultList))
+            if len(resultList) >= resultCheckSize:
+                # Allow to change attendance data False -> True 
+                resultName = chanegeAttendance(resultList)
+                
+                if resultName != "Unknown":
+                    # Need getNowTime(), resultName to send sql query
+                    sql = ("""UPDATE attend_info SET isAttendance = 1, attendanceTime = '{0}' 
+                            WHERE studentID = (SELECT studentID FROM stu_info WHERE studentName = '{1}');""".format(getNowTime(), resultName))
+                    queryExecutor(sql)
+
+                    print("{0}님 출석처리 되었습니다".format(resultName))
+
+                resultList.clear()
 
     return frame
 
-    
+def insertStudent(stuData):
+    '''
+    args discription
+    stuData : student data to insert in DB
+    '''
 
-        
+    stuID = stuData[0]
+    stuName = stuData[1]
+
+    sql = "INSERT INTO stu_info (studentID, studentName) VALUES ({0}, '{1}');".format(stuID, stuName)
+    
+    queryExecutor(sql)
