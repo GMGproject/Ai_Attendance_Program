@@ -63,7 +63,7 @@ pip install -r requirements.txt
 python c_main.py --host "host" --port port --cam camnumber
 
 #Server 실행 방법
-python s_main.py --host "host" --port
+python s_main.py --host "host" --port port
 ```
 
 
