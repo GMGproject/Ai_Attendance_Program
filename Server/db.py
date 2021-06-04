@@ -4,14 +4,16 @@ import mysql.connector
 def connectDB():
     try:
         db = mysql.connector.connect(
-            host="localhost",
-            user="root",
+            host="14.51.76.72",
+            port=3306,
+            user="djroot",
             passwd="1234",
+            auth_plugin='mysql_native_password',
             database="AttendanceProgram")
 
         return db
     except Exception as e:
-        print("Connection Error : " + e)
+        print("Connection Error : " , e)
 
 # Disconnect with connected DB
 def disconnectDB(db):
@@ -47,3 +49,6 @@ def queryExecutor(sql):
         db.commit()
 
     disconnectDB(db)
+
+temp = "Select * From stu_info;"
+queryExecutor(temp)
