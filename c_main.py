@@ -12,9 +12,10 @@ def main(args):
     connectWithServer(client_socket=client_socket,
                         host=host, 
                         port=port)
+                        
     while True:
         print("helloworld")
-        #break
+        break
         
     disconnectWithServer(client_socket)
     
