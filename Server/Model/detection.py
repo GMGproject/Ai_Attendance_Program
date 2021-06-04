@@ -41,7 +41,6 @@ def detectMTCNN(frame):
     cv2.imshow('frame', frame)
 """
 
-
 def detectSSD(frame):
     '''
     args discription
@@ -60,36 +59,39 @@ def detectSSD(frame):
 
     faces = [] # faces box to send on face recognition model
 
-    width = frame.shape[1]
-    height = frame.shape[0]
+    if frame is None:
+        return faces
+    else:
+        width = frame.shape[1]
+        height = frame.shape[0]
 
-    # action for all of data
-    for i in range(0, detections.shape[2]):
-        confidence = detections[0, 0, i, 2] # get confidence for each predict data
-        threshold=0.65 # set threshold for filter out Garbage data
+        # action for all of data
+        for i in range(0, detections.shape[2]):
+            confidence = detections[0, 0, i, 2] # get confidence for each predict data
+            threshold=0.65 # set threshold for filter out Garbage data
 
-        if confidence > threshold:
-            # calculate face positions for predict data * frame size
-            # because predict data was normalized data so we have to multiply by frame size
-            box = detections[0, 0, i, 3:7] * np.array([width, height, width, height])
+            if confidence > threshold:
+                # calculate face positions for predict data * frame size
+                # because predict data was normalized data so we have to multiply by frame size
+                box = detections[0, 0, i, 3:7] * np.array([width, height, width, height])
 
-            (startX, startY, endX, endY) = box.astype("int")
-            
-            # check position value if position is out of frame then put it on frame size
-            if startX < 0:
-                startX = 0
-            elif endX > width:
-                endX = int(width)
+                (startX, startY, endX, endY) = box.astype("int")
+                
+                # check position value if position is out of frame then put it on frame size
+                if startX < 0:
+                    startX = 0
+                elif endX > width:
+                    endX = int(width)
 
-            if startY < 0:
-                startY = 0
-            elif endY > height:
-                endY = int(height)
-            
-            faces.append((startY, endX, endY, startX)) # top, right, bottom left
+                if startY < 0:
+                    startY = 0
+                elif endY > height:
+                    endY = int(height)
+                
+                faces.append((startY, endX, endY, startX)) # top, right, bottom left
 
-            # Draw infos in Frame==================================================================    
-            print("{:.2f}%".format(confidence * 100), startX, startY, endX, endY)
-            #======================================================================================
+                # Draw infos in Frame==================================================================    
+                print("{:.2f}%".format(confidence * 100), startX, startY, endX, endY)
+                #======================================================================================
 
-    return faces
+        return faces
