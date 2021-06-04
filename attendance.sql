@@ -37,3 +37,6 @@ INSERT INTO lecture_info (lectureID, lectureName) VALUES (1, 'Programming');
 INSERT INTO attend_info (studentID, attendanceDate, isAttendance, lectureID) VALUES (201610560, '2021-06-04', 0, 1);
 INSERT INTO attend_info (studentID, attendanceDate, isAttendance, lectureID) VALUES (201610587, '2021-06-04', 0, 1);
 INSERT INTO attend_info (studentID, attendanceDate, isAttendance, lectureID) VALUES (201510581, '2021-06-04', 0, 1);
+
+# 값 변경할때 attendance False -> True
+UPDATE attend_info SET isAttendance = 1, attendanceTime = 'HH:MM:SS' WHERE studentID = (SELECT studentID FROM stu_info WHERE studentName = 'studentName');
