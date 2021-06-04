@@ -21,6 +21,35 @@ Lang : Pyhton 3.8
 DB   : MySQL 8.0.23
 ```
 
+### DB 구조
+```
+# desc attend_info;
++----------------+--------------+------+-----+---------+-------+
+| Field          | Type         | Null | Key | Default | Extra |
++----------------+--------------+------+-----+---------+-------+
+| studentID      | int unsigned | NO   | MUL | NULL    |       |
+| attendanceDate | date         | NO   |     | NULL    |       |
+| attendanceTime | time         | YES  |     | NULL    |       |
+| isAttendance   | tinyint(1)   | NO   |     | NULL    |       |
+| lectureID      | int unsigned | YES  | MUL | NULL    |       |
++----------------+--------------+------+-----+---------+-------+
+# desc lecture_info;
++-------------+--------------+------+-----+---------+-------+
+| Field       | Type         | Null | Key | Default | Extra |
++-------------+--------------+------+-----+---------+-------+
+| lectureID   | int unsigned | NO   | PRI | NULL    |       |
+| lectureName | varchar(45)  | NO   |     | NULL    |       |
++-------------+--------------+------+-----+---------+-------+
+# desc stu_info;
++-------------+--------------+------+-----+---------+-------+
+| Field       | Type         | Null | Key | Default | Extra |
++-------------+--------------+------+-----+---------+-------+
+| studentID   | int unsigned | NO   | PRI | NULL    |       |
+| studentName | varchar(45)  | NO   |     | NULL    |       |
++-------------+--------------+------+-----+---------+-------+
+```
+
+
 ### 패키지 설치
 ```
 # 먼저 dlib을 설치해야 requirements 설치시 패키지 충돌 오류가 없습니다.
