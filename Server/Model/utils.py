@@ -30,3 +30,4 @@ def checkFaceSize(faces, size=100):
                 passCheck = True
 
     return passCheck, passedFaces
+

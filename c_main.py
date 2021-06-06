@@ -1,11 +1,19 @@
 import socket, argparse
-from Client.client import connectWithServer, disconnectWithServer
+import sys
+
+from Client.ui import WindowClass
+#from Client.client import connectWithServer, disconnectWithServer
+
+from PyQt5.QtWidgets import *
 
 def main(args):
-    host = args.host
-    port = args.port
-    cam = args.cam
+    app = QApplication(sys.argv)
+    mainWindow = WindowClass()
+    mainWindow.show()
+    app.exec_()            
 
+
+    '''
     # create client socket
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
@@ -18,6 +26,7 @@ def main(args):
         break
         
     disconnectWithServer(client_socket)
+    '''
     
 
 if __name__ == "__main__":

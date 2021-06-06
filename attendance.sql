@@ -15,11 +15,14 @@ CREATE TABLE lecture_info(
 );
 
 CREATE TABLE attend_info (
+  attendID INTEGER UNSIGNED NOT NULL
+                      AUTO_INCREMENT,   # 출결 인덱스
   studentID INTEGER UNSIGNED NOT NULL,  # 학생 학번
   attendanceDate DATE NOT NULL,         # 출석 날짜
   attendanceTime TIME NULL,             # 출석 시간
   isAttendance BOOLEAN NOT NULL,        # 출석 여부
   lectureID INTEGER UNSIGNED NULL,      # 출석 강의 번호
+  PRIMARY KEY(attendID),
   FOREIGN KEY(studentID) 
   REFERENCES stu_info(studentID),
   FOREIGN KEY(lectureID) 

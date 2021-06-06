@@ -4,11 +4,13 @@ import pickle
 import numpy as np
 import cv2
 
+from threading import Thread
+
 from Server.Model.detection import detectSSD, detectMTCNN
 from Server.Model.model import predict
 from Server.Model.utils import checkFaceSize
 
-from Server.utils import chanegeAttendance, getNowTime
+from Server.utils import chanegeAttendance, getNowTime, makeFolder, showFrame
 from Server.db import queryExecutor
 
 global resultList
@@ -38,6 +40,7 @@ def createServerSocket(host, port):
 
     return server_socket
 
+"""
 def recvData(client_socket):
     '''
     args discription
@@ -72,6 +75,57 @@ def recvData(client_socket):
         except struct.error as se:
             print(se)
             print("server Disconnected")
+"""
+
+def recvData(client_socket):
+    '''
+    args discription
+    client_socket : client connected socket
+    '''
+    data=b""
+    payloadSize=struct.calcsize("Q")
+
+    while True:
+        try:
+            while len(data) < payloadSize:
+                print("Come on!!")
+                packet = client_socket.recv(8)  # 4K
+                if not packet: break
+                data += packet
+            packedMsgSize = data[:payloadSize] 
+            data = data[payloadSize:]
+            msgSize = struct.unpack("Q", packedMsgSize)[0]
+            while len(data) < msgSize:
+                data += client_socket.recv(8)
+
+            data = data[:msgSize]
+            data = pickle.loads(data)
+
+            checkMsg(data)
+
+        except struct.error as se:
+            print(se)
+            print("server Disconnected")
+    
+def checkMsg(data): # data = list[msg, real data]
+    '''
+    args discription
+    data : recv data from client
+    this function will split data and control to convey data to next function
+    '''
+    msg = data[0]
+    realData = data[1:]
+
+    if msg == "frame":
+        faceRecognition(realData)
+        #recogThread = Thread(target=faceRecognition, args=(realData))
+        #recogThread.start()
+    elif msg == "insert":
+        insertStudent(realData)
+        #insertThread = Thread(target=insertStudent, args=(realData))
+        #insertThread.start()
+    else:
+        print("No data!!!!!!")
 
 def faceRecognition(frame, faceSize=200, resultCheckSize=10):
     '''
@@ -119,17 +173,21 @@ def faceRecognition(frame, faceSize=200, resultCheckSize=10):
 
                 resultList.clear()
 
-    return frame
+    showFrame(frame) 
 
 def insertStudent(stuData):
     '''
     args discription
-    stuData : student data to insert in DB
+    stuData : student data to insert in DB & Image Data
     '''
+    stuFace = stuData[0]
+    stuID = stuData[1]
+    stuName = stuData[2]
+    trainPath = "./Server/Model/train/"
 
-    stuID = stuData[0]
-    stuName = stuData[1]
+    # make folder & Save Image to train next time
+    makeFolder(trainPath + stuName)
+    cv2.imread('./Server/Model/train/{0}/{0}.PNG'.format(stuName), stuFace)
 
     sql = "INSERT INTO stu_info (studentID, studentName) VALUES ({0}, '{1}');".format(stuID, stuName)
-    
     queryExecutor(sql)

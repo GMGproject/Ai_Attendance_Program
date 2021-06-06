@@ -4,9 +4,9 @@ import mysql.connector
 def connectDB():
     try:
         db = mysql.connector.connect(
-            host="14.51.76.72",
+            host="localhost",
             port=3306,
-            user="djroot",
+            user="root",
             passwd="1234",
             auth_plugin='mysql_native_password',
             database="AttendanceProgram")
@@ -49,6 +49,3 @@ def queryExecutor(sql):
         db.commit()
 
     disconnectDB(db)
-
-temp = "Select * From stu_info;"
-queryExecutor(temp)
