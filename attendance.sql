@@ -1,10 +1,13 @@
+
 CREATE DATABASE AttendanceProgram;      # DB 만들때
 DROP DATABASE AttendanceProgram;        # DB 지울때
 
+USE AttendanceProgram;
+
 # TABLE 만들때
 CREATE TABLE stu_info (
-  studentID INTEGER UNSIGNED NOT NULL,  # 학생 학번
-  studentName VARCHAR(45) NOT NULL,     # 학생 이름
+  studentID INTEGER UNSIGNED NOT NULL,  
+  studentName VARCHAR(45) NOT NULL,     
   PRIMARY KEY(studentID)
 );
 
@@ -37,9 +40,20 @@ INSERT INTO stu_info (studentID, studentName) VALUES (201510581, 'Junsu');
 INSERT INTO lecture_info (lectureID, lectureName) VALUES (1, 'Programming');
 
 # isAttendance 1 = True, 0 = False
-INSERT INTO attend_info (studentID, attendanceDate, isAttendance, lectureID) VALUES (201610560, '2021-06-04', 0, 1);
-INSERT INTO attend_info (studentID, attendanceDate, isAttendance, lectureID) VALUES (201610587, '2021-06-04', 0, 1);
-INSERT INTO attend_info (studentID, attendanceDate, isAttendance, lectureID) VALUES (201510581, '2021-06-04', 0, 1);
+INSERT INTO attend_info (studentID, attendanceDate, isAttendance, lectureID) VALUES (201610560, '2021-06-08', 0, 1);
+INSERT INTO attend_info (studentID, attendanceDate, isAttendance, lectureID) VALUES (201610587, '2021-06-08', 0, 1);
+INSERT INTO attend_info (studentID, attendanceDate, isAttendance, lectureID) VALUES (201510581, '2021-06-08', 0, 1);
 
 # 값 변경할때 attendance False -> True
-UPDATE attend_info SET isAttendance = 1, attendanceTime = 'HH:MM:SS' WHERE studentID = (SELECT studentID FROM stu_info WHERE studentName = 'studentName');
+UPDATE attend_info 
+SET isAttendance = 0, attendanceTime = NULL 
+WHERE studentID = (SELECT studentID FROM stu_info WHERE studentName = 'Daejeong')
+  AND attendanceDate = "2021-06-08";
+
+SELECT * FROM stu_info;
+SELECT * FROM attend_info;
+
+SELECT isAttendance, studentID, (SELECT studentName FROM stu_info s WHERE s.studentID = a.studentID) as studentName 
+FROM attend_info a 
+WHERE attendanceDate = "2021-06-08"; 
+
