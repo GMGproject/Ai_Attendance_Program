@@ -2,7 +2,7 @@ import argparse
 import threading
 
 from Server.server import createServerSocket, returnInternalHost
-from Server.server import recvData
+from Server.server import recvData, checkMsg
 
 from Server.Model.model import train
 
@@ -25,8 +25,12 @@ def main(args):
         client_socket, addr = server_socket.accept()
         if client_socket != None:
             print("Connect with {0}:{1}".format(client_socket, addr))
-            recvData(client_socket)
+            recvThread = threading.Thread(target=recvData, args=(client_socket,))
+            recvThread.start()  
+            break
             
+    checkMsg()
+
 if __name__ == "__main__":
     # get internal host
     internalHost = returnInternalHost()

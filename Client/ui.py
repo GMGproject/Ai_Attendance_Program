@@ -1,8 +1,4 @@
-from Client.client import insertStudent
-from Client.client import ClientSocket
-from queue import Queue
-
-import socket
+from Client.client import insertStudent, startClient, endClient
 
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
@@ -12,14 +8,12 @@ form_class = uic.loadUiType('./Client/ui/AttModel.ui')[0]
 
 class WindowClass(QMainWindow, form_class):
     def __init__(self):
-        clientsocket = ClientSocket()
         super().__init__()  
         self.setupUi(self)
 
-        
         # 버튼 이벤트
-        self.btu_start.clicked.connect(lambda:clientsocket.connectWithServer())
-        self.btu_finish.clicked.connect(lambda:clientsocket.disconnectWithServer())
+        self.btu_start.clicked.connect(lambda:startClient())
+        self.btu_finish.clicked.connect(lambda:endClient())
         self.btu_picture.clicked.connect(self.openFile)
         self.btu_clear.clicked.connect(self.LogClear)
 

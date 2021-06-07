@@ -49,6 +49,7 @@ def detectSSD(frame):
     return
     faces : detected faces list from frame 
     '''
+    faces = [] # faces box to send on face recognition model
     try:
         model=cv2.dnn.readNetFromCaffe(prototxt_name,model_name) # read face detection model made by caffe
         blob=cv2.dnn.blobFromImage(cv2.resize(frame,(300,300)),1.0, (300,300),(104.0,177.0,123.0)) # Convert Frame data to Blob data 
@@ -56,8 +57,8 @@ def detectSSD(frame):
         detections=model.forward() #predict 200 boxes for one frame
     except Exception as e:
         print(e)
+        return faces
 
-    faces = [] # faces box to send on face recognition model
 
     if frame is None:
         return faces

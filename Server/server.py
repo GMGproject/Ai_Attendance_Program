@@ -1,3 +1,4 @@
+import queue
 import socket
 import struct
 import pickle
@@ -5,6 +6,7 @@ import numpy as np
 import cv2
 
 from threading import Thread
+from queue import Queue
 
 from Server.Model.detection import detectSSD, detectMTCNN
 from Server.Model.model import predict
@@ -15,6 +17,8 @@ from Server.db import queryExecutor
 
 global resultList
 resultList = []
+
+queue = Queue()
 
 def returnInternalHost():
     '''
@@ -40,79 +44,49 @@ def createServerSocket(host, port):
 
     return server_socket
 
-"""
 def recvData(client_socket):
     '''
     args discription
     client_socket : client connected socket
     '''
-    data=b""
-    payload_size=struct.calcsize("Q")
 
     while True:
-        try:
-            while len(data) < payload_size:
-                packet = client_socket.recv(4 * 1024)  # 4K
-                if not packet: break
-                data += packet
-            packed_msg_size = data[:payload_size] 
-            data = data[payload_size:]
-            msg_size = struct.unpack("Q", packed_msg_size)[0]
-            while len(data) < msg_size:
-                data += client_socket.recv(4 * 1024)
-
-            frame_data = data[:msg_size]
-            data = data[msg_size:]
-            frame = pickle.loads(frame_data)
-
-            frame = faceRecognition(frame)
-
-            cv2.imshow('server VIDEO', frame)
-            key = cv2.waitKey(1) & 0xFF
-            if key == 27:
-                break
-
-        except struct.error as se:
-            print(se)
-            print("server Disconnected")
-"""
-
-def recvData(client_socket):
-    '''
-    args discription
-    client_socket : client connected socket
-    '''
-    data=b""
-    payloadSize=struct.calcsize("Q")
-
-    while True:
+        data=b""
+        payloadSize=struct.calcsize("Q")
         try:
             while len(data) < payloadSize:
-                print("Come on!!")
-                packet = client_socket.recv(8)  # 4K
+                packet = client_socket.recv(65535)  # 4K
                 if not packet: break
                 data += packet
-            packedMsgSize = data[:payloadSize] 
+
+            packedMsgSize = data[:payloadSize]
             data = data[payloadSize:]
             msgSize = struct.unpack("Q", packedMsgSize)[0]
+            print(msgSize)
+
             while len(data) < msgSize:
-                data += client_socket.recv(8)
+                data += client_socket.recv(65535)
 
             data = data[:msgSize]
             data = pickle.loads(data)
 
-            checkMsg(data)
+            queue.put(data)
 
+        except Exception as e:
+            print("error : " + str(e))
+            break
         except struct.error as se:
             print(se)
             print("server Disconnected")
     
-def checkMsg(data): # data = list[msg, real data]
+def checkMsg(): # data = list[msg, real data]
     '''
     args discription
     data : recv data from client
     this function will split data and control to convey data to next function
     '''
+    data = queue.get()
+
     msg = data[0]
     realData = data[1:]
 
@@ -140,6 +114,7 @@ def faceRecognition(frame, faceSize=200, resultCheckSize=10):
     frame : Drawn frame
     '''
     global resultList
+    frame = frame[0]
 
     # Face Detection
     faces = detectSSD(frame)
@@ -173,7 +148,7 @@ def faceRecognition(frame, faceSize=200, resultCheckSize=10):
 
                 resultList.clear()
 
-    showFrame(frame) 
+        showFrame(frame) 
 
 def insertStudent(stuData):
     '''
