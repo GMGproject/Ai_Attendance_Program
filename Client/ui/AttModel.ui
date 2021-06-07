@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>705</width>
-    <height>562</height>
+    <width>699</width>
+    <height>556</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>우송대학교 게임멀티미디어 전공 졸업작품</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QGroupBox" name="groupBox">
@@ -20,7 +20,7 @@
       <x>10</x>
       <y>10</y>
       <width>451</width>
-      <height>501</height>
+      <height>91</height>
      </rect>
     </property>
     <property name="minimumSize">
@@ -30,65 +30,116 @@
      </size>
     </property>
     <property name="title">
-     <string>영상</string>
+     <string>서버 연결</string>
     </property>
     <widget class="QPushButton" name="btu_finish">
      <property name="geometry">
       <rect>
-       <x>240</x>
-       <y>20</y>
-       <width>191</width>
-       <height>23</height>
+       <x>340</x>
+       <y>50</y>
+       <width>101</width>
+       <height>31</height>
       </rect>
      </property>
      <property name="text">
-      <string>Finish</string>
+      <string>해제</string>
      </property>
     </widget>
     <widget class="QPushButton" name="btu_start">
      <property name="geometry">
       <rect>
-       <x>20</x>
+       <x>340</x>
+       <y>10</y>
+       <width>101</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>연결</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
        <y>20</y>
-       <width>201</width>
-       <height>23</height>
+       <width>56</width>
+       <height>12</height>
       </rect>
      </property>
+     <property name="font">
+      <font>
+       <family>굴림</family>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
      <property name="text">
-      <string>Start</string>
+      <string>서버 IP</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
      </property>
     </widget>
-    <widget class="QPlainTextEdit" name="tex_folderName">
+    <widget class="QLabel" name="label_2">
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>460</y>
-       <width>341</width>
-       <height>31</height>
+       <y>60</y>
+       <width>56</width>
+       <height>12</height>
       </rect>
      </property>
-    </widget>
-    <widget class="QPushButton" name="btu_picture">
-     <property name="geometry">
-      <rect>
-       <x>360</x>
-       <y>460</y>
-       <width>81</width>
-       <height>31</height>
-      </rect>
+     <property name="font">
+      <font>
+       <family>굴림</family>
+       <pointsize>10</pointsize>
+      </font>
      </property>
      <property name="text">
-      <string>등록하기</string>
+      <string>서버 Port</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
      </property>
     </widget>
-    <widget class="QListWidget" name="list_att">
+    <widget class="QTextEdit" name="text_host">
      <property name="geometry">
       <rect>
-       <x>10</x>
+       <x>80</x>
+       <y>10</y>
+       <width>251</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="inputMethodHints">
+      <set>Qt::ImhNone</set>
+     </property>
+     <property name="html">
+      <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Gulim'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;192.168.0.112&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+    </widget>
+    <widget class="QTextEdit" name="text_port">
+     <property name="geometry">
+      <rect>
+       <x>80</x>
        <y>50</y>
-       <width>431</width>
-       <height>401</height>
+       <width>251</width>
+       <height>31</height>
       </rect>
+     </property>
+     <property name="inputMethodHints">
+      <set>Qt::ImhNone</set>
+     </property>
+     <property name="html">
+      <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Gulim'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;9999&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
     </widget>
    </widget>
@@ -117,13 +168,173 @@
      </item>
     </layout>
    </widget>
+   <widget class="QGroupBox" name="groupBox_3">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>110</y>
+      <width>451</width>
+      <height>401</height>
+     </rect>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>217</width>
+      <height>0</height>
+     </size>
+    </property>
+    <property name="title">
+     <string>사용자 추가</string>
+    </property>
+    <widget class="QPushButton" name="btu_picture">
+     <property name="geometry">
+      <rect>
+       <x>340</x>
+       <y>280</y>
+       <width>101</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>사진 찾기</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_4">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>325</y>
+       <width>31</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>굴림</family>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>이름</string>
+     </property>
+    </widget>
+    <widget class="QPlainTextEdit" name="text_studentID">
+     <property name="geometry">
+      <rect>
+       <x>270</x>
+       <y>320</y>
+       <width>171</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="plainText">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_5">
+     <property name="geometry">
+      <rect>
+       <x>230</x>
+       <y>325</y>
+       <width>31</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>굴림</family>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>학번</string>
+     </property>
+    </widget>
+    <widget class="QPlainTextEdit" name="text_studentName">
+     <property name="geometry">
+      <rect>
+       <x>50</x>
+       <y>320</y>
+       <width>171</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="plainText">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_6">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>280</y>
+       <width>31</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>굴림</family>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>경로</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btu_insert">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>360</y>
+       <width>431</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>사용자 추가</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_image">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>20</y>
+       <width>431</width>
+       <height>251</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>사진</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_folderName">
+     <property name="geometry">
+      <rect>
+       <x>50</x>
+       <y>280</y>
+       <width>281</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>굴림</family>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>경로</string>
+     </property>
+    </widget>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>705</width>
+     <width>699</width>
      <height>21</height>
     </rect>
    </property>

@@ -20,32 +20,28 @@ def disconnectDB(db):
     db.close()
 
 # query for Insert, Update, Delete
-def queryIUD(cursor, sql):
+def queryIUD(sql):
     try:
+        db = connectDB()
+        cursor = db.cursor()    
         cursor.execute(sql)
+        db.commit()
     except Exception as e:
         print(e)
+    finally:
+        disconnectDB(db)
 
 # query for Select & print Selected Data
-def queryS(cursor, sql):
+def queryS(sql):
     try:
+        db = connectDB()
+        cursor = db.cursor()
         cursor.execute(sql)
         result = cursor.fetchall()
-        for column in result:
-            print(column)
+
+        return result
     except Exception as e:
         print(e)
+    finally:
+        disconnectDB(db)
 
-# Parse sql to check type & help to do their each part 
-def queryExecutor(sql):
-    db = connectDB()
-    cursor = db.cursor()
-    type = sql.split(' ')[0]
-
-    if type.upper() == 'SELECT':
-        queryS(cursor, sql)
-    else:
-        queryIUD(cursor, sql)
-        db.commit()
-
-    disconnectDB(db)

@@ -1,6 +1,5 @@
 import datetime
 import os
-import cv2
 
 def chanegeAttendance(resultList):
     '''
@@ -25,6 +24,14 @@ def getNowTime():
     nowTime = now.strftime('%H:%M:%S')
     return nowTime
 
+def getToday():
+    '''
+    return
+    today : 'YYYY-mm-dd'
+    '''
+    today = datetime.date.today().strftime('%Y-%m-%d')
+    return today
+
 def makeFolder(path):
     '''
     args discription
@@ -33,7 +40,3 @@ def makeFolder(path):
     if not os.path.exists(path):
         os.makedirs(path)
         print("Create Folder : " + path)
-
-
-def showFrame(frame):
-    cv2.imshow("ServerFrame", frame)

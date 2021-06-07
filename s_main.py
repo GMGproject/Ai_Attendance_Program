@@ -25,11 +25,10 @@ def main(args):
         client_socket, addr = server_socket.accept()
         if client_socket != None:
             print("Connect with {0}:{1}".format(client_socket, addr))
-            recvThread = threading.Thread(target=recvData, args=(client_socket,))
-            recvThread.start()  
+            recvData(client_socket)
             break
-            
-    checkMsg()
+        
+    server_socket.close()
 
 if __name__ == "__main__":
     # get internal host

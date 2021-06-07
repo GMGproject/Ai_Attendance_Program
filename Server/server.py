@@ -1,24 +1,19 @@
-import queue
 import socket
 import struct
 import pickle
-import numpy as np
 import cv2
 
-from threading import Thread
-from queue import Queue
-
-from Server.Model.detection import detectSSD, detectMTCNN
+from Server.Model.detection import detectSSD
 from Server.Model.model import predict
 from Server.Model.utils import checkFaceSize
 
-from Server.utils import chanegeAttendance, getNowTime, makeFolder, showFrame
-from Server.db import queryExecutor
+from Server.utils import chanegeAttendance, getNowTime, getToday, makeFolder
+from Server.db import queryIUD, queryS
+
+from threading import Thread
 
 global resultList
 resultList = []
-
-queue = Queue()
 
 def returnInternalHost():
     '''
@@ -49,28 +44,26 @@ def recvData(client_socket):
     args discription
     client_socket : client connected socket
     '''
-
+    data = b""
+    payload_size = struct.calcsize("Q")
     while True:
-        data=b""
-        payloadSize=struct.calcsize("Q")
         try:
-            while len(data) < payloadSize:
-                packet = client_socket.recv(65535)  # 4K
+            while len(data) < payload_size:
+                packet = client_socket.recv(2 * 1024)  # 4K
                 if not packet: break
                 data += packet
+            packed_msg_size = data[:payload_size]
+            data = data[payload_size:]
+            msg_size = struct.unpack("Q", packed_msg_size)[0]
 
-            packedMsgSize = data[:payloadSize]
-            data = data[payloadSize:]
-            msgSize = struct.unpack("Q", packedMsgSize)[0]
-            print(msgSize)
+            while len(data) < msg_size:
+                data += client_socket.recv(2 * 1024)
 
-            while len(data) < msgSize:
-                data += client_socket.recv(65535)
+            frame_data = data[:msg_size]
+            data = data[msg_size:]
+            dataList = pickle.loads(frame_data) 
 
-            data = data[:msgSize]
-            data = pickle.loads(data)
-
-            queue.put(data)
+            checkMsg(client_socket, dataList)
 
         except Exception as e:
             print("error : " + str(e))
@@ -78,43 +71,63 @@ def recvData(client_socket):
         except struct.error as se:
             print(se)
             print("server Disconnected")
+
+def sendData(client_socket, data):
+    '''
+    args discription
+    client_socket : socket for send data to client
+    data          : any data for send to client
+    '''
+    try:
+        a = pickle.dumps(data)
+        message = struct.pack("Q", len(a)) + a
+        sendResult = client_socket.sendall(message)
+        if sendResult == None:
+            pass
+        else:
+            raise Exception('Send Error')
+    except Exception as e:
+        print(e)
     
-def checkMsg(): # data = list[msg, real data]
+def checkMsg(client_socket, data):
     '''
     args discription
     data : recv data from client
     this function will split data and control to convey data to next function
     '''
-    data = queue.get()
-
     msg = data[0]
-    realData = data[1:]
+    image = data[1]
 
     if msg == "frame":
-        faceRecognition(realData)
-        #recogThread = Thread(target=faceRecognition, args=(realData))
-        #recogThread.start()
+        sqlResult = faceRecognition(image)
+        if sqlResult != None:
+            sqlResult = ["attend", sqlResult]
+        else:
+            sqlResult = ["None", sqlResult]
     elif msg == "insert":
-        insertStudent(realData)
-        #insertThread = Thread(target=insertStudent, args=(realData))
-        #insertThread.start()
+        stuID = data[2]
+        stuName = data[3]
+        sqlResult = insertStudent(image, stuID, stuName)
+        sqlResult = ["insert", sqlResult]
     else:
         print("No data!!!!!!")
+
+    sendData(client_socket, sqlResult)
 
 def faceRecognition(frame, faceSize=200, resultCheckSize=10):
     '''
     args discription
-    frame : frame from client
-    faceSize : Set faceSize to recognize face
+    frame           : frame from client
+    faceSize        : Set faceSize to recognize face
      - default = 200
     resultCheckSize : Set how many frames to check result
      - default = 10
 
     return
-    frame : Drawn frame
+    sqlResult       : sql result for echo to client
     '''
     global resultList
-    frame = frame[0]
+    sqlResult = None
 
     # Face Detection
     faces = detectSSD(frame)
@@ -141,28 +154,49 @@ def faceRecognition(frame, faceSize=200, resultCheckSize=10):
                 if resultName != "Unknown":
                     # Need getNowTime(), resultName to send sql query
                     sql = ("""UPDATE attend_info SET isAttendance = 1, attendanceTime = '{0}' 
-                            WHERE studentID = (SELECT studentID FROM stu_info WHERE studentName = '{1}');""".format(getNowTime(), resultName))
-                    queryExecutor(sql)
-
-                    print("{0}님 출석처리 되었습니다".format(resultName))
+                            WHERE studentID = (SELECT studentID FROM stu_info WHERE studentName = '{1}')
+                            AND attendanceDate = '{2}';""".format(getNowTime(), resultName, getToday()))
+                    queryIUD(sql)
+                    
+                    # For Send Attendance Result to Client
+                    sql = ("""SELECT isAttendance, studentID, (SELECT studentName FROM stu_info s WHERE s.studentID = a.studentID) as studentName 
+                              FROM attend_info a WHERE attendanceDate = '{0}';""".format(getToday()))
+                    sqlResult = queryS(sql)
 
                 resultList.clear()
 
-        showFrame(frame) 
+    return sqlResult
 
-def insertStudent(stuData):
+def insertStudent(stuFace, stuID, stuName):
     '''
     args discription
-    stuData : student data to insert in DB & Image Data
+    stuFace   : student Face Data (np.ndarray)
+    stuId     : studentID
+    stuName   : studentName
+
+    result
+    sqlResult : sql result for echo to client 
     '''
-    stuFace = stuData[0]
-    stuID = stuData[1]
-    stuName = stuData[2]
+    sqlResult = False
+
     trainPath = "./Server/Model/train/"
 
     # make folder & Save Image to train next time
     makeFolder(trainPath + stuName)
-    cv2.imread('./Server/Model/train/{0}/{0}.PNG'.format(stuName), stuFace)
+    cv2.imwrite('./Server/Model/train/{0}/{0}.PNG'.format(stuName), stuFace)
 
+    # insert data in DB
     sql = "INSERT INTO stu_info (studentID, studentName) VALUES ({0}, '{1}');".format(stuID, stuName)
-    queryExecutor(sql)
+    queryIUD(sql)
+
+    # check inserted data
+    sql = ("SELECT studentName FROM stu_info WHERE studentID = {0};".format(stuID))
+    sqlResult = queryS(sql)
+
+    for column in sqlResult:
+        print(column, type(column))
+        if column[0] == stuName:
+            sqlResult = True
+            break
+
+    return sqlResult
