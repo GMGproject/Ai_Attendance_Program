@@ -5,7 +5,6 @@ import pickle
 import face_recognition
 
 from face_recognition.face_recognition_cli import image_files_in_folder
-from PIL import Image, ImageDraw
 from sklearn import neighbors
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}

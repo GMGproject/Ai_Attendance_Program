@@ -10,8 +10,6 @@ from Server.Model.utils import checkFaceSize
 from Server.utils import chanegeAttendance, getNowTime, getToday, makeFolder
 from Server.db import queryIUD, queryS
 
-from threading import Thread
-
 global resultList
 resultList = []
 

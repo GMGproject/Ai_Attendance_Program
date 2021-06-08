@@ -1,8 +1,7 @@
 import argparse
-import threading
 
 from Server.server import createServerSocket, returnInternalHost
-from Server.server import recvData, checkMsg
+from Server.server import recvData
 
 from Server.Model.model import train
 
